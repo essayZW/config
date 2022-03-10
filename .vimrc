@@ -1,8 +1,14 @@
-let mapleader = ","
+let mapleader = "\<Space>"
 inoremap jk <esc>
 set hlsearch
 set termguicolors
 
+
+set foldmethod=syntax
+set foldlevelstart=99
+
+set wildmenu
+set wildmode=full
 
 if has("gui_running")
     set guioptions-=m " 隐藏菜单栏
@@ -48,22 +54,31 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'tomasr/molokai'
 Plug 'tomasiser/vim-code-dark'
 Plug 'editorconfig/editorconfig-vim'
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " git support
 Plug 'tpope/vim-fugitive'
 " vue highlight
 Plug 'leafOfTree/vim-vue-plugin'
+Plug 'altercation/vim-colors-solarized'
+Plug 'overcache/NeoSolarized'
 call plug#end()
 
-colorscheme codedark
-set background=dark
+let g:solarized_termcolors=256
+
+if has("gui_running")
+    colorscheme  solarized
+    set background=dark
+else
+    colorscheme NeoSolarized
+    set background=dark
+endif
 
 "设置光标所在行的高亮
 set cursorline
 set hidden
 "字符匹配单词
 set incsearch
-set guifont=SF\ Mono\ 11
+set guifont=Hack
 set autoindent
 
 " 设置切换Buffer快捷键"
@@ -90,17 +105,26 @@ syntax on
 "关于状态栏的小配置
 set noswapfile
 set undofile
-set undodir=~/.vimcache/undodir
 set backup
-set backupdir=~/.vimcache/back
-let g:airline_theme="codedark"
+if has("nvim")
+    set undodir=~/.nvimcache/undodir
+    set backupdir=~/.nvimcache/back
+else
+    set undodir=~/.vimcache/undodir
+    set backupdir=~/.vimcache/back
+endif
+if has("gui_running")
+    let g:airline_theme="solarized"
+else
+    let g:airline_theme="solarized"
+endif
 set laststatus=2  "永远显示状态栏
+
 
 "这个是安装字体后 必须设置此项"
 let g:airline_powerline_fonts = 1
 
 "打开tabline功能,方便查看Buffer和切换，这个功能比较不错"
-"我还省去了minibufexpl插件，因为我习惯在1个Tab下用多个buffer"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
@@ -114,12 +138,15 @@ map wm :NERDTreeToggle<CR>
 autocmd vimenter * if !argc()|NERDTree|endif
 "当NERDTree为剩下的唯一窗口时自动关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 "设置树的显示图标
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeIgnore = ['\.pyc$']  " 过滤所有.pyc文件不显示
 let g:NERDTreeShowLineNumbers=1  " 是否显示行号
-let g:NERDTreeHidden=0     "不显示隐藏文件
+let g:NERDTreeHidden=0
 "Making it prettier
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
@@ -241,9 +268,10 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
+set signcolumn=yes
 if has("patch-8.1.1564")
   " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
+  " set signcolumn=number
 else
   set signcolumn=yes
 endif
@@ -265,6 +293,7 @@ nmap <leader>gd <Plug>(coc-definition)
 nmap <leader>gy <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>gr <Plug>(coc-references)
+nmap <leader>coa :CocAction<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -287,6 +316,8 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -297,6 +328,7 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
+" 打开markdown预览
 nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<CR>
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -329,15 +361,16 @@ endfunction
 
 
 " vim-go
-"autocmd FileType go nmap <leader>b  <Plug>(go-build)
-"autocmd FileType go nmap <leader>r  <Plug>(go-run)
-"autocmd FileType go nmap <leader>t  <Plug>(go-test)
-"let g:go_highlight_types = 1
-"let g:go_highlight_fields = 1
-"let g:go_highlight_functions = 1
-"let g:go_highlight_function_calls = 1
-"let g:go_highlight_operators = 1
-"let g:go_highlight_extra_types = 1
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>t  <Plug>(go-test)
+let g:go_gopls_enabled = 0
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
 
 " LeadefF
 " don't show the help in normal mode
@@ -351,9 +384,37 @@ let g:Lf_PreviewInPopup = 1
 let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
 let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
 
+" 调出目录下全文件模糊搜索
+noremap <leader>rg :<C-U><C-R>=printf("Leaderf rg")<CR><CR>
+" 搜索目录文件
 noremap <leader>lff :<C-U><C-R>=printf("Leaderf file --no-ignore %s", "")<CR><CR>
+" 搜索打开的buffer
 noremap <leader>lfb :<C-U><C-R>=printf("Leaderf buffer")<CR><CR>
+" 搜索当前文件中的行
+noremap <leader>lfl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+" 搜索所有打开的buffer中的行
+noremap <leader>lfla :<C-U><C-R>=printf("Leaderf line %s --all", "")<CR><CR>
+" 搜索当前文件中的函数
+noremap <leader>lfu :<C-U><C-R>=printf("Leaderf function")<CR><CR>
+" 搜索所有打开文件中的函数
+noremap <leader>lfua :<C-U><C-R>=printf("Leaderf function --all")<CR><CR>
+" search visually selected text literally
+xnoremap <leader>lfrgf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR><CR>
+noremap <leader>lfrgo :<C-U>Leaderf! rg --recall<CR>
 let g:Lf_WildIgnore={'file':['*.vcproj', '*.vcxproj'],'dir':['node_modules']}
+" Show icons, icons are shown by default
+let g:Lf_ShowDevIcons = 1
+" For GUI vim, the icon font can be specify like this, for example
+let g:Lf_DevIconsFont = "DroidSansMono Nerd Font Mono"
+" should use `Leaderf gtags --update` first
+let g:Lf_Ctags ="/usr/local/bin/exctags"
+let g:Lf_GtagsAutoGenerate = 1
+let g:Lf_Gtagslabel = 'native-pygments'
+noremap <leader>lfgr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>lfgd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>lfgo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>lfgn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>lfgp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
 
 function! s:DiffWithSaved()
@@ -364,3 +425,10 @@ function! s:DiffWithSaved()
   exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 com! DiffSaved call s:DiffWithSaved()
+
+" 注释的时候自动加个空格
+let g:NERDSpaceDelims=1
+
+" 解决signcolumn颜色问题
+autocmd ColorScheme * highlight! link SignColumn LineNr
+highlight! link SignColumn LineNr
