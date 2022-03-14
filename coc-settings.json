@@ -1,0 +1,63 @@
+{
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".git/", ".hg/"],
+      "initializationOptions": {
+        "cache": {
+          "directory": "/tmp/ccls"
+        }
+      }
+    }
+  },
+  "eslint.autoFixOnSave": true,
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html"],
+  "emmet.includeLanguages": {
+    "vue": "css"
+  },
+  "colors.filetypes": ["*"],
+  "go.goplsArgs": ["-remote=auto", "-logfile", "/tmp/gopls.log"],
+  "html-css-support.enabledLanguages": [
+    "html",
+    "vue",
+    "blade",
+    "htmldjango",
+    "typescriptreact",
+    "javascriptreact"
+  ],
+  "cSpell.userWords": [
+    "Infof",
+    "Logined",
+    "Queryx",
+    "Rowx",
+    "amqp",
+    "applyid",
+    "asim",
+    "beihai",
+    "ccls",
+    "creater",
+    "gatewaypb",
+    "gname",
+    "gonic",
+    "gopls",
+    "guregu",
+    "hpcbroker",
+    "hpcmanager",
+    "hpcpb",
+    "hpcproto",
+    "htmldjango",
+    "jmoiron",
+    "logfile",
+    "objc",
+    "objcpp",
+    "permissionpb",
+    "publicpb",
+    "rabbitmq",
+    "sqldb",
+    "sqlx",
+    "ugadb",
+    "userdb",
+    "userpb"
+  ]
+}
