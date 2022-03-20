@@ -10,6 +10,8 @@ set foldlevelstart=99
 set wildmenu
 set wildmode=full
 
+let g:ale_disable_lsp = 1
+
 if has("gui_running")
     set guioptions-=m " 隐藏菜单栏
     set guioptions-=T " 隐藏工具栏
@@ -36,31 +38,33 @@ Plug 'mhinz/vim-startify'
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
-"Plug 'mattn/emmet-vim'
-"Plug 'jiangmiao/auto-pairs'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'dense-analysis/ale'
-"Plug 'ervandew/supertab'
 Plug 'Yggdroot/LeaderF'
-"Plug 'gorodinskiy/vim-coloresque'
 Plug 'rking/ag.vim'
-"Plug 'ludovicchabant/vim-gutentags'
 Plug 'bronson/vim-trailing-whitespace'
-"微信小程序插件
 Plug 'Chiel92/vim-autoformat'
 Plug 'octol/vim-cpp-enhanced-highlight'
-"Plug 'tomasr/molokai'
 Plug 'tomasiser/vim-code-dark'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " git support
 Plug 'tpope/vim-fugitive'
 " vue highlight
 Plug 'leafOfTree/vim-vue-plugin'
 Plug 'altercation/vim-colors-solarized'
 Plug 'overcache/NeoSolarized'
+Plug 'tomasr/molokai'
+Plug 'dense-analysis/ale'
+Plug 'buoto/gotests-vim'
+Plug 'ryanoasis/vim-devicons'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'gorodinskiy/vim-coloresque'
+"Plug 'mattn/emmet-vim'
+"Plug 'jiangmiao/auto-pairs'
+"Plug 'ludovicchabant/vim-gutentags'
+"Plug 'ervandew/supertab'
 call plug#end()
 
 let g:solarized_termcolors=256
@@ -140,7 +144,7 @@ autocmd vimenter * if !argc()|NERDTree|endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+            \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 "设置树的显示图标
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
@@ -185,7 +189,7 @@ let g:ale_lint_on_insert_leave = 1
 let g:ale_c_cppcheck_options = '--enable=all'
 let g:ale_cpp_cppcheck_options = '--enable=all'
 let g:ale_python_pylint_options = '--disable=C,R –extension-pkg-whitelist=cv2'
-let g:ale_cpp_cc_options = '-I /usr/include/opencv4/ -isystem /usr/include/opencv4/'
+let g:ale_cpp_cc_options = ''
 "关于startify插件的设置
 
 " 起始页显示的列表长度
@@ -220,24 +224,24 @@ let g:startify_skiplist = [
 
 "" 检测 ~/.vimcache/tags 不存在就新建
 "if !isdirectory(s:vim_tags)
-   "silent! call mkdir(s:vim_tags, 'p')
+"silent! call mkdir(s:vim_tags, 'p')
 "endif
 
 
 set tags=./.tags;,.tags
 
 let g:clipboard = {
-  \   'name': 'xclip-xfce4-clipman',
-  \   'copy': {
-  \      '+': 'xclip -selection clipboard',
-  \      '*': 'xclip -selection clipboard',
-  \    },
-  \   'paste': {
-  \      '+': 'xclip -selection clipboard -o',
-  \      '*': 'xclip -selection clipboard -o',
-  \   },
-  \   'cache_enabled': 1,
-  \ }
+            \   'name': 'xclip-xfce4-clipman',
+            \   'copy': {
+                \      '+': 'xclip -selection clipboard',
+                \      '*': 'xclip -selection clipboard',
+                \    },
+                \   'paste': {
+                    \      '+': 'xclip -selection clipboard -o',
+                    \      '*': 'xclip -selection clipboard -o',
+                    \   },
+                    \   'cache_enabled': 1,
+                    \ }
 
 
 set clipboard+=unnamedplus
@@ -270,23 +274,25 @@ set shortmess+=c
 " diagnostics appear/become resolved.
 set signcolumn=yes
 if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  " set signcolumn=number
+    " Recently vim can merge signcolumn and number column into one
+    " set signcolumn=number
 else
-  set signcolumn=yes
+    set signcolumn=yes
 endif
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
+            \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 " GoTo code navigation.
 nmap <leader>gd <Plug>(coc-definition)
@@ -298,13 +304,13 @@ nmap <leader>coa :CocAction<CR>
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+        call CocActionAsync('doHover')
+    else
+        execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
 endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -320,43 +326,43 @@ command! -nargs=0 Format :call CocAction('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
 " 打开markdown预览
 nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<CR>
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " go 保存时候自动格式化
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 autocmd BufWritePre *.go :call CocAction('format')
 " coc git
 " lightline
 let g:lightline = {
-  \ 'active': {
-  \   'left': [
-  \     [ 'mode', 'paste' ],
-  \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
-  \   ],
-  \   'right':[
-  \     [ 'filetype', 'fileencoding', 'lineinfo', 'percent' ],
-  \     [ 'blame' ]
-  \   ],
-  \ },
-  \ 'component_function': {
-  \   'blame': 'LightlineGitBlame',
-  \ }
-\ }
+            \ 'active': {
+                \   'left': [
+                    \     [ 'mode', 'paste' ],
+                    \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
+                    \   ],
+                    \   'right':[
+                    \     [ 'filetype', 'fileencoding', 'lineinfo', 'percent' ],
+                    \     [ 'blame' ]
+                    \   ],
+                    \ },
+                    \ 'component_function': {
+                        \   'blame': 'LightlineGitBlame',
+                        \ }
+                        \ }
 autocmd User CocGitStatusChange {command}
 
 function! LightlineGitBlame() abort
-  let blame = get(b:, 'coc_git_blame', '')
-  " return blame
-  return winwidth(0) > 120 ? blame : ''
+    let blame = get(b:, 'coc_git_blame', '')
+    " return blame
+    return winwidth(0) > 120 ? blame : ''
 endfunction
 
 
@@ -386,6 +392,7 @@ let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
 
 " 调出目录下全文件模糊搜索
 noremap <leader>rg :<C-U><C-R>=printf("Leaderf rg")<CR><CR>
+noremap <leader>lrg :<C-U><C-R>=printf("Leaderf! rg --recall")<CR><CR>
 " 搜索目录文件
 noremap <leader>lff :<C-U><C-R>=printf("Leaderf file --no-ignore %s", "")<CR><CR>
 " 搜索打开的buffer
@@ -418,11 +425,11 @@ noremap <leader>lfgp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><C
 
 
 function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+    let filetype=&ft
+    diffthis
+    vnew | r # | normal! 1Gdd
+    diffthis
+    exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
 endfunction
 com! DiffSaved call s:DiffWithSaved()
 
