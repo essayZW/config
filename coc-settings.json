@@ -16,8 +16,12 @@
   "emmet.includeLanguages": {
     "vue": "css"
   },
+  "diagnostic.displayByAle": true,
   "colors.filetypes": ["*"],
   "go.goplsArgs": ["-remote=auto", "-logfile", "/tmp/gopls.log"],
+  "go.goplsOptions": {
+      "experimentalWorkspaceModule": true
+  },
   "html-css-support.enabledLanguages": [
     "html",
     "vue",
@@ -29,6 +33,7 @@
   "cSpell.userWords": [
     "Infof",
     "Logined",
+    "Navigations",
     "Queryx",
     "Rowx",
     "amqp",
@@ -37,6 +42,7 @@
     "beihai",
     "ccls",
     "creater",
+    "etcdaddress",
     "gatewaypb",
     "gname",
     "gonic",
@@ -44,20 +50,40 @@
     "guregu",
     "hpcbroker",
     "hpcmanager",
+    "hpcmannager",
     "hpcpb",
     "hpcproto",
     "htmldjango",
     "jmoiron",
     "logfile",
+    "majutsushi",
+    "markdownlint",
+    "mattn",
+    "mhinz",
+    "mozillazg",
+    "mysqlpass",
+    "mysqlroot",
+    "neoclide",
+    "nodedb",
+    "nodepb",
+    "nums",
     "objc",
     "objcpp",
     "permissionpb",
+    "phpls",
+    "projectdb",
+    "projectpb",
+    "protobuf",
     "publicpb",
     "rabbitmq",
+    "scrooloose",
     "sqldb",
     "sqlx",
+    "startify",
+    "struct",
     "ugadb",
     "userdb",
-    "userpb"
+    "userpb",
+    "yaegassy"
   ]
 }
