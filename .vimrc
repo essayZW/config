@@ -42,7 +42,6 @@ Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF'
-Plug 'rking/ag.vim'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'Chiel92/vim-autoformat'
 Plug 'tomasiser/vim-code-dark'
@@ -58,8 +57,11 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 if has("nvim")
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'folke/todo-comments.nvim'
 endif
-Plug 'puremourning/vimspector'
+" Plug 'rking/ag.vim'
+" Plug 'puremourning/vimspector'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'gorodinskiy/vim-coloresque'
 "Plug 'mattn/emmet-vim'
@@ -110,7 +112,6 @@ set shiftwidth=4
 set expandtab
 set softtabstop=4
 syntax on
-"关于状态栏的小配置
 set noswapfile
 set undofile
 set backup
@@ -132,7 +133,7 @@ set laststatus=2  "永远显示状态栏
 "这个是安装字体后 必须设置此项"
 let g:airline_powerline_fonts = 1
 
-"打开tabline功能,方便查看Buffer和切换，这个功能比较不错"
+"打开tabline功能,方便查看Buffer和切换
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
@@ -334,6 +335,7 @@ function! LightlineGitBlame() abort
     " return blame
     return winwidth(0) > 120 ? blame : ''
 endfunction
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 
 " vim-go
@@ -416,4 +418,5 @@ highlight! link SignColumn LineNr
 
 if has('nvim')
     lua require('plugin-config/nvim-treesitter')
+    lua require('plugin-config/todo-comments')
 endif
