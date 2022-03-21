@@ -45,13 +45,10 @@ Plug 'Yggdroot/LeaderF'
 Plug 'rking/ag.vim'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'Chiel92/vim-autoformat'
-Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'tomasiser/vim-code-dark'
 Plug 'editorconfig/editorconfig-vim'
 " git support
 Plug 'tpope/vim-fugitive'
-" vue highlight
-Plug 'leafOfTree/vim-vue-plugin'
 Plug 'altercation/vim-colors-solarized'
 Plug 'overcache/NeoSolarized'
 Plug 'tomasr/molokai'
@@ -59,12 +56,19 @@ Plug 'dense-analysis/ale'
 Plug 'buoto/gotests-vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+if has("nvim")
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+endif
+Plug 'puremourning/vimspector'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'gorodinskiy/vim-coloresque'
 "Plug 'mattn/emmet-vim'
 "Plug 'jiangmiao/auto-pairs'
 "Plug 'ludovicchabant/vim-gutentags'
 "Plug 'ervandew/supertab'
+" Plug 'octol/vim-cpp-enhanced-highlight'
+" vue highlight
+" Plug 'leafOfTree/vim-vue-plugin'
 call plug#end()
 
 let g:solarized_termcolors=256
@@ -205,29 +209,6 @@ let g:startify_skiplist = [
             \ '/project/.*/documentation',
             \ ]
 
-
-
-"" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
-"let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', '.vscode', 'go.mod']
-
-"" 所生成的数据文件的名称
-"let g:gutentags_ctags_tagfile = '.tags'
-
-"" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-"let s:vim_tags = expand('~/.vimcache/tags')
-"let g:gutentags_cache_dir = s:vim_tags
-
-"" 配置 ctags 的参数
-"let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
-"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
-"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
-
-"" 检测 ~/.vimcache/tags 不存在就新建
-"if !isdirectory(s:vim_tags)
-"silent! call mkdir(s:vim_tags, 'p')
-"endif
-
-
 set tags=./.tags;,.tags
 
 let g:clipboard = {
@@ -245,17 +226,6 @@ let g:clipboard = {
 
 
 set clipboard+=unnamedplus
-
-"c++语法高亮
-"cpp-enhanced-highlight
-"高亮类，成员函数，标准库和模板
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_concepts_highlight = 1
-let g:cpp_experimental_simple_template_highlight = 1
-"文件较大时使用下面的设置高亮模板速度较快，但会有一些小错误
-let g:cpp_experimental_template_highlight = 1
-
 
 " ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
 if exists("&autoread")
@@ -385,10 +355,12 @@ let g:Lf_UseCache = 0
 let g:Lf_UseVersionControlTool = 0
 let g:Lf_IgnoreCurrentBufferName = 1
 " popup mode
-"let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
+" let g:Lf_WindowPosition = 'popup'
+" let g:Lf_PreviewInPopup = 1
 let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
 let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+
 
 " 调出目录下全文件模糊搜索
 noremap <leader>rg :<C-U><C-R>=printf("Leaderf rg")<CR><CR>
@@ -413,6 +385,8 @@ let g:Lf_WildIgnore={'file':['*.vcproj', '*.vcxproj'],'dir':['node_modules']}
 let g:Lf_ShowDevIcons = 1
 " For GUI vim, the icon font can be specify like this, for example
 let g:Lf_DevIconsFont = "DroidSansMono Nerd Font Mono"
+" If needs
+" set ambiwidth=double
 " should use `Leaderf gtags --update` first
 let g:Lf_Ctags ="/usr/local/bin/exctags"
 let g:Lf_GtagsAutoGenerate = 1
@@ -439,3 +413,7 @@ let g:NERDSpaceDelims=1
 " 解决signcolumn颜色问题
 autocmd ColorScheme * highlight! link SignColumn LineNr
 highlight! link SignColumn LineNr
+
+if has('nvim')
+    lua require('plugin-config/nvim-treesitter')
+endif
