@@ -1,16 +1,21 @@
 let mapleader = "\<Space>"
 inoremap jk <esc>
+
+" 高亮搜索
 set hlsearch
+" 终端真彩色
 set termguicolors
 
 
+" 折叠代码块方式
 set foldmethod=syntax
+" 用来关闭打开文件时候的自动折叠
 set foldlevelstart=99
 
+" 用来设置vim命令行模式下的tab候选
 set wildmenu
 set wildmode=full
 
-let g:ale_disable_lsp = 1
 
 if has("gui_running")
     set guioptions-=m " 隐藏菜单栏
@@ -51,7 +56,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'altercation/vim-colors-solarized'
 Plug 'overcache/NeoSolarized'
 Plug 'tomasr/molokai'
-Plug 'dense-analysis/ale'
 Plug 'buoto/gotests-vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -60,9 +64,9 @@ if has("nvim")
     Plug 'nvim-lua/plenary.nvim'
     Plug 'folke/todo-comments.nvim'
 endif
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plug 'rking/ag.vim'
 " Plug 'puremourning/vimspector'
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'gorodinskiy/vim-coloresque'
 "Plug 'mattn/emmet-vim'
 "Plug 'jiangmiao/auto-pairs'
@@ -177,24 +181,6 @@ set relativenumber
 autocmd InsertEnter * :set norelativenumber number
 autocmd InsertLeave * :set relativenumber
 
-
-"ale错误提示符号设置
-let g:ale_sign_error = '>x'
-let g:ale_sign_warning = '>!'
-let g:ale_linters = {
-            \ 'cpp': ['gcc'],
-            \ 'c': ['gcc'],
-            \ 'python': ['pylint'],
-            \ 'javascript' : ['jslint'],
-            \}
-" normal 模式下文字改变运行 linter
-let g:ale_lint_on_text_changed = 'normal'
-" 离开 insert 模式的时候运行 linter
-let g:ale_lint_on_insert_leave = 1
-let g:ale_c_cppcheck_options = '--enable=all'
-let g:ale_cpp_cppcheck_options = '--enable=all'
-let g:ale_python_pylint_options = '--disable=C,R –extension-pkg-whitelist=cv2'
-let g:ale_cpp_cc_options = ''
 "关于startify插件的设置
 
 " 起始页显示的列表长度
