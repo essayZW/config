@@ -16,7 +16,6 @@
   "emmet.includeLanguages": {
     "vue": "css"
   },
-  "diagnostic.displayByAle": true,
   "colors.filetypes": ["*"],
   "go.goplsArgs": ["-remote=auto", "-logfile", "/tmp/gopls.log"],
   "go.goplsOptions": {
