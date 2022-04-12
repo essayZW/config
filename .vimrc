@@ -1,6 +1,11 @@
 let mapleader = "\<Space>"
 inoremap jk <esc>
 
+" Uncomment the following to have Vim jump to the last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
 " 高亮搜索
 set hlsearch
 " 终端真彩色
@@ -64,17 +69,10 @@ if has("nvim")
     Plug 'nvim-lua/plenary.nvim'
     Plug 'folke/todo-comments.nvim'
 endif
+Plug 'puremourning/vimspector'
+Plug 'liuchengxu/vim-which-key'
+Plug 'joshdick/onedark.vim'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-" Plug 'rking/ag.vim'
-" Plug 'puremourning/vimspector'
-"Plug 'gorodinskiy/vim-coloresque'
-"Plug 'mattn/emmet-vim'
-"Plug 'jiangmiao/auto-pairs'
-"Plug 'ludovicchabant/vim-gutentags'
-"Plug 'ervandew/supertab'
-" Plug 'octol/vim-cpp-enhanced-highlight'
-" vue highlight
-" Plug 'leafOfTree/vim-vue-plugin'
 call plug#end()
 
 let g:solarized_termcolors=256
@@ -82,6 +80,7 @@ let g:solarized_termcolors=256
 if has("gui_running")
     colorscheme  solarized
     set background=dark
+    set ambiwidth=double
 else
     colorscheme NeoSolarized
     set background=dark
@@ -92,7 +91,7 @@ set cursorline
 set hidden
 "字符匹配单词
 set incsearch
-set guifont=Hack
+set guifont=SF\ Mono
 set autoindent
 
 " 设置切换Buffer快捷键"
@@ -177,9 +176,9 @@ let g:tagbar_width=20
 
 
 "插入模式下用绝对行号, 普通模式下用相对
-set relativenumber
+set relativenumber number
 autocmd InsertEnter * :set norelativenumber number
-autocmd InsertLeave * :set relativenumber
+autocmd InsertLeave * :set relativenumber number
 
 "关于startify插件的设置
 
@@ -198,21 +197,6 @@ let g:startify_skiplist = [
 
 set tags=./.tags;,.tags
 
-let g:clipboard = {
-            \   'name': 'xclip-xfce4-clipman',
-            \   'copy': {
-                \      '+': 'xclip -selection clipboard',
-                \      '*': 'xclip -selection clipboard',
-                \    },
-                \   'paste': {
-                    \      '+': 'xclip -selection clipboard -o',
-                    \      '*': 'xclip -selection clipboard -o',
-                    \   },
-                    \   'cache_enabled': 1,
-                    \ }
-
-
-set clipboard+=unnamedplus
 
 " ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
 if exists("&autoread")
@@ -298,30 +282,14 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 autocmd BufWritePre *.go :call CocAction('format')
 " coc git
-" lightline
-let g:lightline = {
-            \ 'active': {
-                \   'left': [
-                    \     [ 'mode', 'paste' ],
-                    \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
-                    \   ],
-                    \   'right':[
-                    \     [ 'filetype', 'fileencoding', 'lineinfo', 'percent' ],
-                    \     [ 'blame' ]
-                    \   ],
-                    \ },
-                    \ 'component_function': {
-                        \   'blame': 'LightlineGitBlame',
-                        \ }
-                        \ }
 autocmd User CocGitStatusChange {command}
 
-function! LightlineGitBlame() abort
-    let blame = get(b:, 'coc_git_blame', '')
-    " return blame
-    return winwidth(0) > 120 ? blame : ''
-endfunction
+let g:airline_section_b = "%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}"
+" coc yank
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
+
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
 
 
 " vim-go
@@ -374,7 +342,6 @@ let g:Lf_ShowDevIcons = 1
 " For GUI vim, the icon font can be specify like this, for example
 let g:Lf_DevIconsFont = "DroidSansMono Nerd Font Mono"
 " If needs
-" set ambiwidth=double
 " should use `Leaderf gtags --update` first
 let g:Lf_Ctags ="/usr/local/bin/exctags"
 let g:Lf_GtagsAutoGenerate = 1
@@ -406,3 +373,15 @@ if has('nvim')
     lua require('plugin-config/nvim-treesitter')
     lua require('plugin-config/todo-comments')
 endif
+
+" vimspector
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+
+" which key
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+" By default timeoutlen is 1000 ms
+set timeoutlen=500
+
+" vim-devicons
+autocmd FileType nerdtree setlocal nolist
+let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
