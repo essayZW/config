@@ -1,9 +1,9 @@
 let mapleader = "\<Space>"
 inoremap jk <esc>
 
-" Uncomment the following to have Vim jump to the last position when reopening a file
+" 打开文件时跳转到上次编辑位置
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
 " 高亮搜索
@@ -66,8 +66,6 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 if has("nvim")
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'folke/todo-comments.nvim'
 endif
 Plug 'puremourning/vimspector'
 Plug 'liuchengxu/vim-which-key'
@@ -138,10 +136,7 @@ let g:airline_powerline_fonts = 1
 
 "打开tabline功能,方便查看Buffer和切换
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
 
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#whitespace#symbol = '!'
 let NERDTreeShowHidden=1
 "开启/关闭nerdtree快捷键
 map wm :NERDTreeToggle<CR>
@@ -371,7 +366,6 @@ highlight! link SignColumn LineNr
 
 if has('nvim')
     lua require('plugin-config/nvim-treesitter')
-    lua require('plugin-config/todo-comments')
 endif
 
 " vimspector
@@ -385,3 +379,11 @@ set timeoutlen=500
 " vim-devicons
 autocmd FileType nerdtree setlocal nolist
 let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
+
+" todo comment highlight
+augroup vimrc_todo
+    au!
+    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|OPTIMIZE|XXX):/
+                \ containedin=.*Comment,vimCommentTitle
+augroup END
+hi def link MyTodo Todo
