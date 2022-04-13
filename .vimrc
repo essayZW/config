@@ -136,6 +136,8 @@ let g:airline_powerline_fonts = 1
 
 "打开tabline功能,方便查看Buffer和切换
 let g:airline#extensions#tabline#enabled = 1
+" 打开buffer编号
+let g:airline#extensions#tabline#buffer_nr_show = 1
 
 let NERDTreeShowHidden=1
 "开启/关闭nerdtree快捷键
