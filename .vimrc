@@ -114,27 +114,6 @@ else
 endif
 set laststatus=2  "永远显示状态栏
 
-" let NERDTreeShowHidden=1
-" "开启/关闭nerdtree快捷键
-" map wm :NERDTreeToggle<CR>
-" "let NERDTreeShowBookmarks=1  " 开启Nerdtree时自动显示Bookmarks
-" "打开vim时如果没有文件自动打开NERDTree
-" autocmd vimenter * if !argc()|NERDTree|endif
-" "当NERDTree为剩下的唯一窗口时自动关闭
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-" autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-            " \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-" "设置树的显示图标
-" let g:NERDTreeDirArrowExpandable = '▸'
-" let g:NERDTreeDirArrowCollapsible = '▾'
-" let NERDTreeIgnore = ['\.pyc$']  " 过滤所有.pyc文件不显示
-" let g:NERDTreeShowLineNumbers=1  " 是否显示行号
-" let g:NERDTreeHidden=0
-" "Making it prettier
-" let NERDTreeMinimalUI = 1
-" let NERDTreeDirArrows = 1
-
 
 " 映射tagbar的快捷键
 map <F8> :TagbarToggle<CR>
@@ -453,3 +432,8 @@ nmap <space>es <Cmd>CocCommand explorer --preset simplify<CR>
 
 " List all presets
 nmap <space>el <Cmd>CocList explPresets<CR>
+
+let g:python_host_skip_check=1
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_skip_check=1
+let g:python3_host_prog = '/usr/bin/python3'
