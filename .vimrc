@@ -28,32 +28,22 @@ if has("gui_running")
     set guioptions-=L " 隐藏左侧滚动条
     set guioptions-=r " 隐藏右侧滚动条
     set guioptions-=b " 隐藏底部滚动条
-    set showtabline=0 " 隐藏Tab栏
+    set guioptions-=e
 endif
 
 set encoding=utf-8
 set fileencodings=utf-8,chinese,latin-1
 
-"startify插件与nerd插件冲突的设置
-autocmd VimEnter *
-            \   if !argc()
-            \ |   Startify
-            \ |   NERDTree
-            \ |   wincmd w
-            \ | endif
 
 "Plug插件管理器的设置
 call plug#begin('~/.vim/plugged')
-Plug 'mhinz/vim-startify'
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'scrooloose/nerdtree'
+Plug 'itchyny/lightline.vim'
+" Plug 'scrooloose/nerdtree'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/LeaderF'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'Chiel92/vim-autoformat'
 Plug 'tomasiser/vim-code-dark'
 Plug 'editorconfig/editorconfig-vim'
 " git support
@@ -63,14 +53,15 @@ Plug 'overcache/NeoSolarized'
 Plug 'tomasr/molokai'
 Plug 'buoto/gotests-vim'
 Plug 'ryanoasis/vim-devicons'
-Plug 'Xuyuanp/nerdtree-git-plugin'
 if has("nvim")
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 Plug 'puremourning/vimspector'
 Plug 'liuchengxu/vim-which-key'
 Plug 'joshdick/onedark.vim'
+Plug 'mengelbrecht/lightline-bufferline'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Plug 'Chiel92/vim-autoformat'
 call plug#end()
 
 let g:solarized_termcolors=256
@@ -100,8 +91,6 @@ nnoremap <M-j> :resize +5<cr>
 nnoremap <M-k> :resize -5<cr>
 nnoremap <M-h> :vertical resize -5<cr>
 nnoremap <M-l> :vertical resize +5<cr>
-"" Vim 的默认寄存器和系统剪贴板共享
-"set clipboard+=unnamed
 " 设置 alt 键不映射到菜单栏
 set winaltkeys=no
 "不换行
@@ -123,51 +112,32 @@ else
     set undodir=~/.vimcache/undodir
     set backupdir=~/.vimcache/back
 endif
-if has("gui_running")
-    let g:airline_theme="solarized"
-else
-    let g:airline_theme="solarized"
-endif
 set laststatus=2  "永远显示状态栏
 
-
-"这个是安装字体后 必须设置此项"
-let g:airline_powerline_fonts = 1
-
-"打开tabline功能,方便查看Buffer和切换
-let g:airline#extensions#tabline#enabled = 1
-" 打开buffer编号
-let g:airline#extensions#tabline#buffer_nr_show = 1
-
-let NERDTreeShowHidden=1
-"开启/关闭nerdtree快捷键
-map wm :NERDTreeToggle<CR>
-"let NERDTreeShowBookmarks=1  " 开启Nerdtree时自动显示Bookmarks
-"打开vim时如果没有文件自动打开NERDTree
-autocmd vimenter * if !argc()|NERDTree|endif
-"当NERDTree为剩下的唯一窗口时自动关闭
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-            \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-"设置树的显示图标
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-let NERDTreeIgnore = ['\.pyc$']  " 过滤所有.pyc文件不显示
-let g:NERDTreeShowLineNumbers=1  " 是否显示行号
-let g:NERDTreeHidden=0
-"Making it prettier
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
+" let NERDTreeShowHidden=1
+" "开启/关闭nerdtree快捷键
+" map wm :NERDTreeToggle<CR>
+" "let NERDTreeShowBookmarks=1  " 开启Nerdtree时自动显示Bookmarks
+" "打开vim时如果没有文件自动打开NERDTree
+" autocmd vimenter * if !argc()|NERDTree|endif
+" "当NERDTree为剩下的唯一窗口时自动关闭
+" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+" autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+            " \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+" "设置树的显示图标
+" let g:NERDTreeDirArrowExpandable = '▸'
+" let g:NERDTreeDirArrowCollapsible = '▾'
+" let NERDTreeIgnore = ['\.pyc$']  " 过滤所有.pyc文件不显示
+" let g:NERDTreeShowLineNumbers=1  " 是否显示行号
+" let g:NERDTreeHidden=0
+" "Making it prettier
+" let NERDTreeMinimalUI = 1
+" let NERDTreeDirArrows = 1
 
 
-"""设置tagbar的窗口显示的位置,为左边
-"let g:tagbar_right=0
-""打开文件自动 打开tagbar
-""autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
-"""映射tagbar的快捷键
+" 映射tagbar的快捷键
 map <F8> :TagbarToggle<CR>
-""map <C-t> :TagbarToggle<CR>
 
 let g:tagbar_width=20
 
@@ -177,23 +147,7 @@ set relativenumber number
 autocmd InsertEnter * :set norelativenumber number
 autocmd InsertLeave * :set relativenumber number
 
-"关于startify插件的设置
-
-" 起始页显示的列表长度
-let g:startify_files_number = 20
-
-" 是否自动加载目录下的Session.vim, 很好用
-let g:startify_session_autoload = 1
-
-" 过滤列表，支持正则表达式
-let g:startify_skiplist = [
-            \ '\.vimgolf',
-            \ '^/tmp',
-            \ '/project/.*/documentation',
-            \ ]
-
 set tags=./.tags;,.tags
-
 
 " ======= 设置当文件被外部改变的时侯自动读入文件 ======= "
 if exists("&autoread")
@@ -281,7 +235,6 @@ autocmd BufWritePre *.go :call CocAction('format')
 " coc git
 autocmd User CocGitStatusChange {command}
 
-let g:airline_section_b = "%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}"
 " coc yank
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
@@ -389,3 +342,114 @@ augroup vimrc_todo
                 \ containedin=.*Comment,vimCommentTitle
 augroup END
 hi def link MyTodo Todo
+
+" coc multi line support
+nmap <silent> <C-m> <Plug>(coc-cursors-position)
+nmap <silent> <C-n> <Plug>(coc-cursors-word)
+xmap <silent> <C-n> <Plug>(coc-cursors-range)
+
+" light line
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'tabline': {
+      \   'left': [ ['buffers'] ],
+      \   'right': [ ['close'] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'currentfunction': 'CocCurrentFunction'
+      \ },
+      \ 'component_expand': {
+      \   'buffers': 'lightline#bufferline#buffers'
+      \ },
+      \ 'component_type': {
+      \   'buffers': 'tabsel'
+      \ }
+      \ }
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+set showtabline=2
+let g:lightline#bufferline#show_number=3
+let g:lightline#bufferline#ordinal_separator=":"
+let g:lightline#bufferline#enable_devicons=1
+
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+
+nmap <Leader>d1 <Plug>lightline#bufferline#delete(1)
+nmap <Leader>d2 <Plug>lightline#bufferline#delete(2)
+nmap <Leader>d3 <Plug>lightline#bufferline#delete(3)
+nmap <Leader>d4 <Plug>lightline#bufferline#delete(4)
+nmap <Leader>d5 <Plug>lightline#bufferline#delete(5)
+nmap <Leader>d6 <Plug>lightline#bufferline#delete(6)
+nmap <Leader>d7 <Plug>lightline#bufferline#delete(7)
+nmap <Leader>d8 <Plug>lightline#bufferline#delete(8)
+nmap <Leader>d9 <Plug>lightline#bufferline#delete(9)
+nmap <Leader>d0 <Plug>lightline#bufferline#delete(10)
+
+" coc explorer
+let g:coc_explorer_global_presets = {
+\   '.vim': {
+\     'root-uri': '~/.vim',
+\   },
+\   'cocConfig': {
+\      'root-uri': '~/.config/coc',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'tab:$': {
+\     'position': 'tab:$',
+\     'quit-on-open': v:true,
+\   },
+\   'floating': {
+\     'position': 'floating',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingTop': {
+\     'position': 'floating',
+\     'floating-position': 'center-top',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   },
+\   'buffer': {
+\     'sources': [{'name': 'buffer', 'expand': v:true}]
+\   },
+\ }
+
+" Use preset argument to open it
+nmap <space>eb <Cmd>CocCommand explorer --preset buffer<CR>
+nmap <space>es <Cmd>CocCommand explorer --preset simplify<CR>
+
+" List all presets
+nmap <space>el <Cmd>CocList explPresets<CR>
