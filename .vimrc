@@ -323,7 +323,7 @@ augroup END
 hi def link MyTodo Todo
 
 " coc multi line support
-nmap <silent> <C-m> <Plug>(coc-cursors-position)
+nmap <silent> <leader><C-m> <Plug>(coc-cursors-position)
 nmap <silent> <C-n> <Plug>(coc-cursors-word)
 xmap <silent> <C-n> <Plug>(coc-cursors-range)
 
