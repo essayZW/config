@@ -37,29 +37,44 @@ set fileencodings=utf-8,chinese,latin-1
 
 "Plug插件管理器的设置
 call plug#begin('~/.vim/plugged')
+" 简单状态栏
 Plug 'itchyny/lightline.vim'
-" Plug 'scrooloose/nerdtree'
+" 函数定义列表查看
 Plug 'majutsushi/tagbar'
+" 快速注释插件
 Plug 'scrooloose/nerdcommenter'
+" lsp 支持
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'Yggdroot/LeaderF'
+" 模糊搜索插件
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+" 显示行尾的红色,并进行消除
 Plug 'bronson/vim-trailing-whitespace'
+" vscode 默认的黑色主题
 Plug 'tomasiser/vim-code-dark'
+" editorconfig 支持
 Plug 'editorconfig/editorconfig-vim'
 " git support
 Plug 'tpope/vim-fugitive'
+" 正常的solarized配色
 Plug 'altercation/vim-colors-solarized'
+" 不需要终端主题的solarized配色
 Plug 'overcache/NeoSolarized'
+" molokai 主题
 Plug 'tomasr/molokai'
+" 快速生成go test代码
 Plug 'buoto/gotests-vim'
+" 图标
 Plug 'ryanoasis/vim-devicons'
-if has("nvim")
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-endif
+" debug插件
 Plug 'puremourning/vimspector'
+" 提示快捷键
 Plug 'liuchengxu/vim-which-key'
+" onedark 主题
 Plug 'joshdick/onedark.vim'
+" bufferline
 Plug 'mengelbrecht/lightline-bufferline'
+" vue 高亮
+Plug 'leafOfTree/vim-vue-plugin'
 " Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plug 'Chiel92/vim-autoformat'
 call plug#end()
@@ -298,10 +313,6 @@ let g:NERDSpaceDelims=1
 autocmd ColorScheme * highlight! link SignColumn LineNr
 highlight! link SignColumn LineNr
 
-if has('nvim')
-    lua require('plugin-config/nvim-treesitter')
-endif
-
 " vimspector
 let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
 
@@ -332,11 +343,24 @@ function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
 endfunction
 
+function! CocCurrentSymbolsLine()
+    return get(b:, 'coc_symbol_line', '')
+endfunction
+
+function! LightlineTruncatedFileName()
+    let l:filePath = expand('%:~:.')
+    if winwidth(0) > 100
+        return l:filePath
+    else
+        return pathshorten(l:filePath)
+    endif
+endfunction
+
 let g:lightline = {
       \ 'colorscheme': 'solarized',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'cocstatus', 'currentfunction', 'readonly', 'gitbranch', 'filename', 'modified' ] ]
       \ },
       \ 'tabline': {
       \   'left': [ ['buffers'] ],
@@ -344,7 +368,10 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'cocstatus': 'coc#status',
-      \   'currentfunction': 'CocCurrentFunction'
+      \   'currentfunction': 'CocCurrentFunction',
+      \   'gitbranch': 'FugitiveHead',
+      \   'currentSymbolsLine': 'CocCurrentSymbolsLine',
+      \   'filename': 'LightlineTruncatedFileName'
       \ },
       \ 'component_expand': {
       \   'buffers': 'lightline#bufferline#buffers'
@@ -437,3 +464,17 @@ let g:python_host_skip_check=1
 let g:python_host_prog = '/usr/bin/python'
 let g:python3_host_skip_check=1
 let g:python3_host_prog = '/usr/bin/python3'
+
+let g:vim_vue_plugin_config = {
+      \'syntax': {
+      \   'template': ['html'],
+      \   'script': ['javascript', 'typescript'],
+      \   'style': ['css'],
+      \},
+      \'full_syntax': [],
+      \'initial_indent': [],
+      \'attribute': 0,
+      \'keyword': 0,
+      \'foldexpr': 0,
+      \'debug': 0,
+      \}
