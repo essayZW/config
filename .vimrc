@@ -73,10 +73,8 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'joshdick/onedark.vim'
 " bufferline
 Plug 'mengelbrecht/lightline-bufferline'
-" vue 高亮
-Plug 'leafOfTree/vim-vue-plugin'
-" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-" Plug 'Chiel92/vim-autoformat'
+" nvim treesitter功能
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 let g:solarized_termcolors=256
@@ -478,3 +476,9 @@ let g:vim_vue_plugin_config = {
       \'foldexpr': 0,
       \'debug': 0,
       \}
+
+
+" 为nvim开启treesitter功能
+if has('nvim')
+    lua require('plugin-config/nvim-treesitter')
+endif
