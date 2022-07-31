@@ -73,12 +73,15 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'joshdick/onedark.vim'
 " bufferline
 Plug 'mengelbrecht/lightline-bufferline'
-" nvim treesitter功能
+" code dark plus
+Plug 'dunstontc/vim-vscode-theme'
+" nvim treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
-let g:solarized_termcolors=256
-
+let g:solarized_termcolors=16
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "high"
 if has("gui_running")
     colorscheme  solarized
     set background=dark
@@ -99,11 +102,11 @@ set autoindent
 " 设置切换Buffer快捷键"
 nnoremap <C-left> :bp<CR>
 nnoremap <C-right> :bn<CR>
-" 正常模式下 alt+j,k,h,l 调整分割窗口大小
-nnoremap <M-j> :resize +5<cr>
-nnoremap <M-k> :resize -5<cr>
-nnoremap <M-h> :vertical resize -5<cr>
-nnoremap <M-l> :vertical resize +5<cr>
+" 调整分割窗口大小
+nnoremap <leader>rj :resize +5<cr>
+nnoremap <leader>rk :resize -5<cr>
+nnoremap <leader>rh :vertical resize -5<cr>
+nnoremap <leader>rl :vertical resize +5<cr>
 " 设置 alt 键不映射到菜单栏
 set winaltkeys=no
 "不换行
@@ -180,10 +183,15 @@ function! s:check_back_space() abort
 endfunction
 " GoTo code navigation.
 nmap <leader>gd <Plug>(coc-definition)
+nmap <leader>vgd :call CocAction('jumpDefinition', 'vsplit')<CR>
+nmap <leader>hgd :call CocAction('jumpDefinition', 'split')<CR>
 nmap <leader>gy <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>vgi :call CocAction('jumpImplementation', 'vsplit')<CR>
+nmap <leader>hgi :call CocAction('jumpImplementation', 'split')<CR>
 nmap <leader>gr <Plug>(coc-references)
-nmap <leader>coa :CocAction<CR>
+" Show commands.
+nnoremap <silent><nowait> <space>co  :<C-u>CocList commands<cr>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -231,7 +239,11 @@ autocmd User CocGitStatusChange {command}
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>dia  :<C-u>CocList diagnostics<cr>
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 
 " vim-go
@@ -283,16 +295,6 @@ let g:Lf_WildIgnore={'file':['*.vcproj', '*.vcxproj'],'dir':['node_modules']}
 let g:Lf_ShowDevIcons = 1
 " For GUI vim, the icon font can be specify like this, for example
 let g:Lf_DevIconsFont = "DroidSansMono Nerd Font Mono"
-" If needs
-" should use `Leaderf gtags --update` first
-let g:Lf_Ctags ="/usr/local/bin/exctags"
-let g:Lf_GtagsAutoGenerate = 1
-let g:Lf_Gtagslabel = 'native-pygments'
-noremap <leader>lfgr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>lfgd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
-noremap <leader>lfgo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
-noremap <leader>lfgn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
-noremap <leader>lfgp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 
 
 function! s:DiffWithSaved()
