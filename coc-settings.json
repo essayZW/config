@@ -12,15 +12,16 @@
     }
   },
   "eslint.autoFixOnSave": true,
-  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html"],
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html", "lua", "json"],
   "emmet.includeLanguages": {
     "vue": "css"
   },
-  "colors.filetypes": ["*"],
   "go.goplsArgs": ["-remote=auto", "-logfile", "/tmp/gopls.log"],
   "go.goplsOptions": {
-      "experimentalWorkspaceModule": true
+    "usePlaceholders": true,
+    "gofumpt": false
   },
+  "list.maxPreviewHeight": 38,
   "html-css-support.enabledLanguages": [
     "html",
     "vue",
@@ -29,10 +30,12 @@
     "typescriptreact",
     "javascriptreact"
   ],
-  "golines.args": [
-      "-m",
-      "128"
-  ],
   "java.jdt.ls.vmargs": "-javaagent:/home/essay/Library/java/lombok.jar",
   "explorer.width": 30,
+  "explorer.file.showHiddenFiles": true,
+  "stylua.styluaPath": "/usr/bin/stylua",
+  "cSpell.userWords": [
+  ],
+  "Lua.telemetry.enable": true,
+  "notification.statusLineProgress": false
 }
