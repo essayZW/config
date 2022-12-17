@@ -71,6 +71,8 @@ Plug 'kenn7/vim-arsync'
 Plug 'liuchengxu/vista.vim'
 " vim-go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" vim-cool
+Plug 'romainl/vim-cool'
 
 
 " vscode 默认的黑色主题
@@ -238,8 +240,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " 打开markdown预览
 nmap <leader>mp :CocCommand markdown-preview-enhanced.openPreview<CR>
 " go 保存时候自动格式化
-autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
-autocmd BufWritePre *.go :call CocAction('format')
+" autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
+" autocmd BufWritePre *.go :call CocAction('format')
 " coc git
 autocmd User CocGitStatusChange {command}
 
@@ -546,16 +548,18 @@ let g:go_def_mapping_enabled = 0
 let g:go_doc_keywordprg_enabled = 0
 let g:go_textobj_enabled = 0
 " 禁用自动格式化,使用coc-go提供的能力
-let g:go_fmt_autosave = 0
+let g:go_fmt_autosave = 1
 " 禁用自动import,使用coc-go提供的能力
-let g:go_imports_autosave = 0
-" vim-go 高亮
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_extra_types = 1
-
+let g:go_imports_autosave = 1
 " 调整maxmempattern
 set maxmempattern=2000
+
+" coc-explorer
+function! s:init_explorer()
+    set relativenumber
+endfunction
+
+augroup CocExplorerCustom
+  autocmd!
+  autocmd FileType coc-explorer call <SID>init_explorer()
+augroup END

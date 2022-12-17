@@ -12,7 +12,7 @@
     }
   },
   "eslint.autoFixOnSave": true,
-  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html", "lua", "json"],
+  "coc.preferences.formatOnSave": true,
   "emmet.includeLanguages": {
     "vue": "css"
   },
@@ -21,7 +21,7 @@
     "usePlaceholders": true,
     "gofumpt": false
   },
-  "list.maxPreviewHeight": 38,
+  "list.maxPreviewHeight": 22,
   "html-css-support.enabledLanguages": [
     "html",
     "vue",
@@ -33,9 +33,9 @@
   "java.jdt.ls.vmargs": "-javaagent:/home/essay/Library/java/lombok.jar",
   "explorer.width": 30,
   "explorer.file.showHiddenFiles": true,
+  "explorer.icon.enableNerdfont": true,
   "stylua.styluaPath": "/usr/bin/stylua",
-  "cSpell.userWords": [
-  ],
   "Lua.telemetry.enable": true,
-  "notification.statusLineProgress": false
+  "notification.statusLineProgress": false,
+  "java.format.settings.url": "/home/essay/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml"
 }
